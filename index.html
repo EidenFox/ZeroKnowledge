@@ -13,7 +13,7 @@
         <div class="logo">ZK-Drive</div>
         <div class="user-controls">
             <button id="navAuthBtn" class="btn-primary">Entrar</button>
-            <div id="userInfo" style="display: none;">
+            <div id="userInfo" class="userInfo" style="display: none;">
                 <span id="userEmailDisplay"></span>
                 <button id="navLogoutBtn" class="btn-danger">Sair</button>
             </div>
@@ -31,9 +31,14 @@
             <div class="dashboard-header"
                 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2>Meu Cofre</h2>
-                <span id="privateKeyStatusBadge"
-                    style="background: var(--success); color: #111; padding: 5px 10px; border-radius: 15px; font-size: 0.8em; font-weight: bold;">🔐
-                    Chave Privada Ativa</span>
+                <div style="display: flex; gap: 10px;">
+                    <span id="serverStatusBadge"
+                        style="background: var(--text-muted); color: #111; padding: 5px 15px; border-radius: 1.5rem; font-size: 0.8em; font-weight: bold;">⏳
+                        Procurando Servidor...</span>
+                    <span id="privateKeyStatusBadge"
+                        style="background: var(--success); color: #111; padding: 5px 15px; border-radius: 1.5rem; font-size: 0.8em; font-weight: bold;">🔐
+                        Chave Privada Ativa</span>
+                </div>
             </div>
 
             <!-- Painel de Upload -->
@@ -54,6 +59,8 @@
         </div>
     </main>
 
+
+    <!-- Modal de Login -->
     <div id="authModal" class="modal-overlay">
         <div class="modal-content">
             <button id="closeModalBtn" class="close-btn">&times;</button>
@@ -70,6 +77,43 @@
                 <button type="submit" id="authSubmitBtn" class="btn-primary">Entrar no Cofre</button>
             </form>
             <p id="authMessage" class="message"></p>
+        </div>
+    </div>
+
+    <!-- Modal de Partilha -->
+    <div id="shareModal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="closeShareModalBtn" class="close-btn">&times;</button>
+            <h2>Partilhar Ficheiro</h2>
+            <p id="shareFileName"
+                style="color: var(--accent); margin-bottom: 15px; word-break: break-all; font-weight: bold;"></p>
+            <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 15px;">O ficheiro permanecerá
+                encriptado de ponta a ponta. Apenas o destinatário poderá abri-lo usando a sua própria palavra-passe.
+            </p>
+
+            <input type="email" id="shareEmailInput" placeholder="E-mail do colega registado" required
+                style="width: 100%; margin-bottom: 10px;">
+            <button id="btnConfirmShare" class="btn-primary" style="width: 100%;">Gerar Cápsula de Acesso</button>
+            <p id="shareStatus" class="message"></p>
+        </div>
+    </div>
+
+    <!-- Modal de Gestão de Acessos -->
+    <div id="manageAccessModal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="closeManageAccessModalBtn" class="close-btn">&times;</button>
+            <h2>Controle de Acessos</h2>
+            <p id="manageFileName"
+                style="color: var(--accent); margin-bottom: 15px; word-break: break-all; font-weight: bold;"></p>
+
+            <div
+                style="background: var(--bg-base); border: 1px solid var(--border); border-radius: 4px; padding: 10px; min-height: 100px; max-height: 250px; overflow-y: auto;">
+                <ul id="accessList"
+                    style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
+                    <!-- Usuários com acesso entrarão aqui -->
+                </ul>
+            </div>
+            <p id="manageAccessStatus" class="message"></p>
         </div>
     </div>
 

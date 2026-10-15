@@ -1,157 +1,284 @@
+@import url('https://fonts.googleapis.com/css2?family=Merienda:wght@400;700&family=Permanent+Marker&display=swap');
+
 :root {
-    --bg-base: #1e1e2e;
-    --bg-surface: #313244;
-    --text-main: #cdd6f4;
-    --text-muted: #a6adc8;
-    --accent: #89b4fa;
-    --accent-hover: #b4befe;
-    --danger: #f38ba8;
-    --danger-hover: #eba0ac;
-    --border: #45475a;
-    --success: #a6e3a1;
+    /* Paleta Neon & Glassmorphism baseada no seu padrão */
+    --neon-pink: #ff0073;
+    --neon-purple: #81008a;
+    --glass-bg: rgba(18, 1, 24, 0.45);
+    --border-glass: rgba(255, 0, 115, 0.5);
+    
+    /* Variáveis legadas mapeadas para o novo estilo para manter compatibilidade com o JS */
+    --bg-base: #0a0a0a;
+    --bg-surface: var(--glass-bg);
+    --text-main: aliceblue;
+    --text-muted: #b3b3b3;
+    --accent: var(--neon-pink);
+    --accent-hover: #ff3399;
+    --danger: #ff003c;
+    --danger-hover: #cc0030;
+    --border: var(--border-glass);
+    --success: aquamarine;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    font-family: system-ui, -apple-system, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     background-color: var(--bg-base);
+    background-image: url('img/1354199.jpeg'); /* Certifique-se de que a imagem existe na sua pasta */
+    background-size: cover;
+    background-attachment: fixed;
+    font-family: 'Merienda', cursive;
     color: var(--text-main);
 }
 
+/* Efeito de Blurr Global no fundo */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.65); 
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: -1;
+}
+
+/* Header / Navbar */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
-    background-color: var(--bg-surface);
-    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 3rem;
+    height: 25vh;
+    background-image: url('https://images3.alphacoders.com/133/thumb-1920-1332803.png');
+    background-size: cover;
+    background-position: center 60%;
+    box-shadow: 0 5px 25px var(--neon-pink);
+    border-radius: 0 0 2rem 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-glass);
 }
 
 .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--accent);
+    font-family: 'Permanent Marker', cursive;
+    font-size: 3.5rem;
+    color: white;
+    text-shadow: 0 0 10px var(--neon-pink), 3px 3px var(--neon-purple);
 }
 
-.btn-primary, .btn-danger {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-    color: #11111b;
-    transition: background 0.3s;
+.user-controls{
+    background: var(--glass-bg);
+    box-shadow: 0 0 30px rgba(255, 0, 115, 0.3);
+    padding: 0.5rem;
+    padding-left: 1rem;
+    border-radius: 2rem 0.5rem 0.5rem 2rem;
+    backdrop-filter: blur(1px);
+
+
 }
-
-.btn-primary { background-color: var(--accent); }
-.btn-primary:hover { background-color: var(--accent-hover); }
-
-.btn-danger { background-color: var(--danger); }
-.btn-danger:hover { background-color: var(--danger-hover); }
 
 main {
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
+    width: 100%;
+    flex-grow: 1;
 }
 
 .view-state { display: none; }
 .view-state.active { display: block; }
 
-.lock-container {
+/* Paineis Internos e Separações */
+.upload-panel, .lock-container {
+    background: var(--glass-bg) !important;
+    border-radius: 1.5rem !important;
+    border: 1px solid var(--border-glass) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 2.5rem !important;
     text-align: center;
-    margin-top: 10vh;
-    color: var(--text-muted);
 }
 
-textarea {
-    background: var(--bg-surface);
-    color: var(--success);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 10px;
-    resize: none;
-    font-family: monospace;
+h2, h3 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    text-shadow: #ff008c 2px 2px;
 }
 
-/* Modal */
+/* Grelha de Ficheiros (Cards) */
+#fileGrid > div {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--border-glass) !important;
+    border-radius: 1.5rem !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#fileGrid > div:hover {
+    /* transform: translateY(-10px); */
+    box-shadow: 0 0 20px var(--neon-pink);
+    border-color: var(--neon-purple) !important;
+    background-color: rgba(51, 0, 46, 0.5) !important; 
+}
+
+/* Botões */
+.btn-primary, .btn-danger, button {
+    font-family: 'Merienda', cursive;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    color: aliceblue !important;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.btn-primary { 
+    background-color: transparent !important;
+    border: 1px solid var(--neon-pink) !important;
+    color: var(--neon-pink) !important;
+}
+
+.btn-primary:hover { 
+    background-color: var(--neon-pink) !important;
+    color: white !important;
+    box-shadow: 0 0 15px var(--neon-pink);
+}
+
+.btn-baixar { 
+    background-color: green !important;
+    border: 1px solid var(--neon-pink) !important;
+    color: white !important;
+}
+
+.btn-danger { 
+    background-color: transparent !important;
+    border: 1px solid var(--danger) !important;
+    color: var(--danger) !important;
+}
+
+.btn-danger:hover { 
+    background-color: var(--danger) !important;
+    color: white !important;
+    box-shadow: 0 0 15px var(--danger);
+}
+
+/* Modais */
 .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.8);
     display: none;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(8px);
+    z-index: 999;
 }
 
 .modal-overlay.active { display: flex; }
 
 .modal-content {
-    background: var(--bg-surface);
-    padding: 2rem;
-    border-radius: 8px;
+    background: var(--glass-bg);
+    padding: 3rem;
+    border-radius: 2rem;
     width: 100%;
-    max-width: 400px;
+    max-width: 450px;
     position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid var(--border-glass);
+    box-shadow: 0 0 30px rgba(255, 0, 115, 0.3);
+    backdrop-filter: blur(15px);
 }
 
 .close-btn {
     position: absolute;
-    top: 10px; right: 15px;
-    background: none; border: none;
-    color: var(--text-muted);
-    font-size: 1.5rem;
+    top: 15px; right: 20px;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--neon-pink) !important;
+    font-size: 2rem;
     cursor: pointer;
 }
 
+.close-btn:hover {
+    text-shadow: 0 0 10px var(--neon-pink);
+}
+
+/* Formulários e Inputs */
 .auth-toggle {
     display: flex;
     gap: 10px;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .auth-toggle button {
     flex: 1;
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    padding: 0.5rem;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: all 0.3s;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--text-muted) !important;
+    border-bottom: 2px solid transparent !important;
+    border-radius: 0;
 }
 
 .auth-toggle button.active {
-    color: var(--accent);
-    border-bottom: 2px solid var(--accent);
-    font-weight: bold;
+    color: var(--neon-pink) !important;
+    border-bottom: 2px solid var(--neon-pink) !important;
+    text-shadow: 0 0 5px var(--neon-pink);
 }
 
 form { 
     display: flex; 
     flex-direction: column; 
-    gap: 1rem; 
+    gap: 1.5rem; 
 }
 
 input {
-    padding: 0.8rem;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-    background: var(--bg-base);
+    font-family: 'Merienda', cursive;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-glass);
+    background: rgba(0, 0, 0, 0.3);
     color: var(--text-main);
     box-sizing: border-box;
+    transition: all 0.3s;
 }
 
 input:focus {
     outline: none;
-    border-color: var(--accent);
+    border-color: var(--neon-purple);
+    box-shadow: 0 0 10px var(--neon-purple);
+    background: rgba(0, 0, 0, 0.5);
 }
 
 .message {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     font-size: 0.9rem;
     text-align: center;
     min-height: 1.2em;
+}
+
+/* Listas (Gestão de Acessos) */
+#accessList li {
+    list-style: none;
+    margin: 0.5rem 0;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 0, 123, 0.3) !important;
+    background: rgba(182, 182, 182, 0.1) !important;
+    backdrop-filter: blur(5px);
+}
+
+#accessList li:hover {
+    background-color: rgba(51, 0, 46, 0.5) !important; 
+    box-shadow: 0 0px 15px rgba(255, 0, 225, 0.2);
 }
