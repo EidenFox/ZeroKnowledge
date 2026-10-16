@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zero-Knowledge Drive</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.3/viewer.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.3/viewer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
 </head>
 
 <body>
@@ -28,37 +32,38 @@
             </div>
         </div>
         <div id="authenticatedView" class="view-state">
-            <div class="dashboard-header"
-                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div class="dashboard-header">
                 <h2>Meu Cofre</h2>
-                <div style="display: flex; gap: 10px;">
-                    <span id="serverStatusBadge"
-                        style="background: var(--text-muted); color: #111; padding: 5px 15px; border-radius: 1.5rem; font-size: 0.8em; font-weight: bold;">⏳
-                        Procurando Servidor...</span>
-                    <span id="privateKeyStatusBadge"
-                        style="background: var(--success); color: #111; padding: 5px 15px; border-radius: 1.5rem; font-size: 0.8em; font-weight: bold;">🔐
-                        Chave Privada Ativa</span>
+                <div class="badges-container">
+                    <span id="serverStatusBadge" class="badge">⏳ Procurando Servidor...</span>
+                    <span id="privateKeyStatusBadge" class="badge badge-success">🔐 Chave Privada Ativa</span>
                 </div>
             </div>
 
             <!-- Painel de Upload -->
-            <div class="upload-panel"
-                style="background: var(--bg-surface); padding: 20px; border-radius: 8px; border: 1px dashed var(--border); margin-bottom: 30px;">
+            <div class="upload-panel">
                 <h3>Fazer Upload de Arquivo</h3>
-                <input type="file" id="fileInput" style="margin-bottom: 15px;">
+                <input type="file" id="fileInput" class="custom-file-input">
                 <button id="btnUpload" class="btn-primary">Criptografar e Enviar</button>
                 <p id="uploadStatus" class="message" style="color: var(--accent);"></p>
             </div>
 
-            <!-- Lista de Arquivos -->
-            <h3>Meus Arquivos</h3>
-            <div id="fileGrid"
-                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
+            <!-- Controles de Visualização e Lista -->
+            <div class="grid-controls">
+                <h3>Meus Arquivos</h3>
+                <select id="viewModeSelect" class="custom-select">
+                    <option value="grid-medium">Imagens Médias</option>
+                    <option value="grid-small">Imagens Pequenas</option>
+                    <option value="grid-large">Imagens Grandes</option>
+                    <!-- <option value="grid-list">Lista Detalhada</option> -->
+                </select>
+            </div>
+            
+            <div id="fileGrid" class="grid-medium">
                 <!-- Os arquivos aparecerão aqui -->
             </div>
         </div>
     </main>
-
 
     <!-- Modal de Login -->
     <div id="authModal" class="modal-overlay">
@@ -85,14 +90,10 @@
         <div class="modal-content">
             <button id="closeShareModalBtn" class="close-btn">&times;</button>
             <h2>Partilhar Ficheiro</h2>
-            <p id="shareFileName"
-                style="color: var(--accent); margin-bottom: 15px; word-break: break-all; font-weight: bold;"></p>
-            <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 15px;">O ficheiro permanecerá
-                encriptado de ponta a ponta. Apenas o destinatário poderá abri-lo usando a sua própria palavra-passe.
-            </p>
+            <p id="shareFileName" class="modal-filename"></p>
+            <p class="modal-description">O ficheiro permanecerá encriptado de ponta a ponta. Apenas o destinatário poderá abri-lo usando a sua própria palavra-passe.</p>
 
-            <input type="email" id="shareEmailInput" placeholder="E-mail do colega registado" required
-                style="width: 100%; margin-bottom: 10px;">
+            <input type="email" id="shareEmailInput" placeholder="E-mail do colega registado" required style="width: 100%; margin-bottom: 10px;">
             <button id="btnConfirmShare" class="btn-primary" style="width: 100%;">Gerar Cápsula de Acesso</button>
             <p id="shareStatus" class="message"></p>
         </div>
@@ -103,17 +104,33 @@
         <div class="modal-content">
             <button id="closeManageAccessModalBtn" class="close-btn">&times;</button>
             <h2>Controle de Acessos</h2>
-            <p id="manageFileName"
-                style="color: var(--accent); margin-bottom: 15px; word-break: break-all; font-weight: bold;"></p>
+            <p id="manageFileName" class="modal-filename"></p>
 
-            <div
-                style="background: var(--bg-base); border: 1px solid var(--border); border-radius: 4px; padding: 10px; min-height: 100px; max-height: 250px; overflow-y: auto;">
-                <ul id="accessList"
-                    style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
+            <div class="access-list-container">
+                <ul id="accessList">
                     <!-- Usuários com acesso entrarão aqui -->
                 </ul>
             </div>
             <p id="manageAccessStatus" class="message"></p>
+        </div>
+    </div>
+
+    <!-- Modal de Preview e Mídia -->
+    <div id="previewModal" class="modal-overlay" style="z-index: 1000;">
+        <div class="modal-content preview-modal-content">
+            <div class="preview-header">
+                <h3 id="previewTitle">Preview</h3>
+                <button id="closePreviewBtn" class="close-btn-preview">&times;</button>
+            </div>
+
+            <div id="previewContainer">
+                <!-- O conteúdo (Canvas, Video, Img, Avisos) será injetado aqui -->
+            </div>
+
+            <div class="preview-footer">
+                <button id="btnForceLoad" class="btn-primary" style="display: none;">Carregar Mesmo Assim</button>
+                <!-- <button id="btnPreviewDownload" class="btn-baixar">Baixar Arquivo</button> -->
+            </div>
         </div>
     </div>
 

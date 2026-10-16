@@ -7,7 +7,7 @@
     --glass-bg: rgba(18, 1, 24, 0.45);
     --border-glass: rgba(255, 0, 115, 0.5);
     
-    /* Variáveis legadas mapeadas para o novo estilo para manter compatibilidade com o JS */
+    /* Variáveis legadas mapeadas para o novo estilo */
     --bg-base: #0a0a0a;
     --bg-surface: var(--glass-bg);
     --text-main: aliceblue;
@@ -31,7 +31,7 @@ body {
     flex-direction: column;
     min-height: 100vh;
     background-color: var(--bg-base);
-    background-image: url('img/1354199.jpeg'); /* Certifique-se de que a imagem existe na sua pasta */
+    background-image: url('img/1354199.jpeg'); 
     background-size: cover;
     background-attachment: fixed;
     font-family: 'Merienda', cursive;
@@ -72,15 +72,13 @@ body::before {
     text-shadow: 0 0 10px var(--neon-pink), 3px 3px var(--neon-purple);
 }
 
-.user-controls{
+.user-controls {
     background: var(--glass-bg);
     box-shadow: 0 0 30px rgba(255, 0, 115, 0.3);
     padding: 0.5rem;
     padding-left: 1rem;
     border-radius: 2rem 0.5rem 0.5rem 2rem;
     backdrop-filter: blur(1px);
-
-
 }
 
 main {
@@ -94,7 +92,30 @@ main {
 .view-state { display: none; }
 .view-state.active { display: block; }
 
-/* Paineis Internos e Separações */
+/* Paineis Internos e Dashboard Header */
+.dashboard-header {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 20px;
+}
+
+.badges-container {
+    display: flex; 
+    gap: 10px;
+}
+
+.badge {
+    background: var(--text-muted); 
+    color: #111; 
+    padding: 5px 15px; 
+    border-radius: 1.5rem; 
+    font-size: 0.8em; 
+    font-weight: bold;
+}
+
+.badge-success { background: var(--success); }
+
 .upload-panel, .lock-container {
     background: var(--glass-bg) !important;
     border-radius: 1.5rem !important;
@@ -104,6 +125,8 @@ main {
     -webkit-backdrop-filter: blur(12px);
     padding: 2.5rem !important;
     text-align: center;
+    margin-bottom: 30px;
+    width: 100%;
 }
 
 h2, h3 {
@@ -112,25 +135,53 @@ h2, h3 {
     text-shadow: #ff008c 2px 2px;
 }
 
+.custom-file-input {
+    margin-bottom: 15px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1rem;
+}
+
+.grid-controls {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-top: 20px;
+}
+
+.custom-select {
+    padding: 5px 10px; 
+    border-radius: 4px; 
+    background: var(--glass-bg); 
+    color: var(--text-main); 
+    border: 1px solid var(--border-glass); 
+    font-family: 'Merienda', cursive;
+}
+
 /* Grelha de Ficheiros (Cards) */
+#fileGrid {
+    display: grid; 
+    gap: 15px; 
+    margin-top: 15px;
+}
+
 #fileGrid > div {
     background: var(--glass-bg) !important;
     border: 1px solid var(--border-glass) !important;
     border-radius: 1.5rem !important;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: box-shadow 0.3s ease;
 }
 
 #fileGrid > div:hover {
-    /* transform: translateY(-10px); */
     box-shadow: 0 0 20px var(--neon-pink);
     border-color: var(--neon-purple) !important;
     background-color: rgba(51, 0, 46, 0.5) !important; 
 }
 
 /* Botões */
-.btn-primary, .btn-danger, button {
+.btn-primary, .btn-danger, .btn-baixar, button {
     font-family: 'Merienda', cursive;
     padding: 0.8rem 1.5rem;
     border: none;
@@ -209,9 +260,10 @@ h2, h3 {
     cursor: pointer;
 }
 
-.close-btn:hover {
-    text-shadow: 0 0 10px var(--neon-pink);
-}
+.close-btn:hover { text-shadow: 0 0 10px var(--neon-pink); }
+
+.modal-filename { color: var(--accent); margin-bottom: 15px; word-break: break-all; font-weight: bold; }
+.modal-description { font-size: 0.85em; color: var(--text-muted); margin-bottom: 15px; }
 
 /* Formulários e Inputs */
 .auth-toggle {
@@ -236,11 +288,7 @@ h2, h3 {
     text-shadow: 0 0 5px var(--neon-pink);
 }
 
-form { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 1.5rem; 
-}
+form { display: flex; flex-direction: column; gap: 1.5rem; }
 
 input {
     font-family: 'Merienda', cursive;
@@ -268,6 +316,18 @@ input:focus {
 }
 
 /* Listas (Gestão de Acessos) */
+.access-list-container {
+    background: var(--bg-base); 
+    border: 1px solid var(--border); 
+    border-radius: 4px; 
+    padding: 10px; 
+    min-height: 100px; 
+    max-height: 250px; 
+    overflow-y: auto;
+}
+
+#accessList { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+
 #accessList li {
     list-style: none;
     margin: 0.5rem 0;
@@ -281,4 +341,129 @@ input:focus {
 #accessList li:hover {
     background-color: rgba(51, 0, 46, 0.5) !important; 
     box-shadow: 0 0px 15px rgba(255, 0, 225, 0.2);
+}
+
+/* Modos de Visualização da Grade */
+#fileGrid.grid-small { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+#fileGrid.grid-medium { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+#fileGrid.grid-large { grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); }
+#fileGrid.grid-list { grid-template-columns: 1fr; }
+
+/* Ajustes visuais dos Cards na lista vs grade */
+#fileGrid.grid-list > div { flex-direction: row !important; align-items: center; }
+#fileGrid.grid-list .card-thumbnail { width: 80px; height: 80px; margin-right: 15px; margin-bottom: 0 !important; }
+#fileGrid.grid-list .card-actions { margin-top: 0 !important; margin-left: auto; }
+
+.card-thumbnail {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background: #111;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.card-thumbnail:hover { transform: scale(1.02); }
+
+
+/* =========================================
+   Ajustes do Modal de Preview 
+========================================= */
+.preview-modal-content {
+    max-width: 95vw !important;
+    height: 90vh;
+    padding: 1.5rem !important;
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-header {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 15px; 
+    border-bottom: 1px solid var(--border-glass); 
+    padding-bottom: 10px;
+}
+
+.preview-header h3 { 
+    margin: 0; 
+    color: var(--text-main); 
+    font-size: 1.2rem; 
+    word-break: break-all; 
+    text-align: left; 
+    text-shadow: var(--accent) 2px 2px;
+}
+
+.close-btn-preview {
+    background: none !important; border: none !important; box-shadow: none !important;
+    color: var(--danger) !important; font-size: 2rem; cursor: pointer; padding: 0 !important;
+}
+
+.viewer-backdrop {
+    background-color: rgba(9, 1, 9, 0.9) !important;
+}
+
+#previewContainer {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: rgba(0,0,0,0.5);
+    border-radius: 8px;
+    position: relative; 
+    width: 100%;
+}
+
+#previewContainer img, #previewContainer video {
+    max-width: 100%; max-height: 100%; object-fit: contain;
+}
+
+.preview-footer {
+    display: flex; justify-content: flex-end; margin-top: 15px; gap: 10px; flex-wrap: wrap;
+}
+
+/* =========================================
+   Responsividade Mobile (Telas < 768px)
+========================================= */
+@media (max-width: 768px) {
+    /* Ajustes Gerais de Modal */
+    .modal-content { padding: 1.5rem; max-width: 95vw; }
+    .preview-modal-content { padding: 1rem !important; height: 95vh; }
+    .preview-header h3 { font-size: 1rem; }
+    
+    /* Navbar Mobile */
+    .navbar { flex-direction: column; height: auto; padding: 1rem; gap: 1rem; text-align: center; }
+    .user-controls { width: 100%; display: flex; justify-content: center; border-radius: 0.5rem; }
+    
+    /* Header do Dashboard */
+    .dashboard-header { flex-direction: column; gap: 15px; text-align: center; }
+    .badges-container { flex-direction: column; width: 100%; }
+    .badge { width: 100%; text-align: center; padding: 10px; }
+
+    /* Painel de Upload (Correção do transbordamento) */
+    .upload-panel, .lock-container { padding: 1.2rem !important; width: 100%; }
+    .custom-file-input { 
+        width: 100%; 
+        max-width: 100%; 
+        overflow: hidden; 
+        text-overflow: ellipsis; 
+        font-size: 0.85rem; 
+    }
+    
+    /* Preview Mobile */
+    .preview-footer { justify-content: center; }
+    .preview-footer button { width: 100%; }
+    
+    /* Título e Select */
+    .grid-controls { flex-direction: column; gap: 10px; }
+    .custom-select { width: 100%; }
+
+    /* Grades */
+    #fileGrid.grid-medium, #fileGrid.grid-large { grid-template-columns: 1fr; } 
+    #fileGrid.grid-list > div { flex-direction: column !important; text-align: center; }
+    #fileGrid.grid-list .card-thumbnail { margin: 0 auto 10px auto !important; }
+    #fileGrid.grid-list .card-actions { margin-left: 0 !important; width: 100%; }
 }
