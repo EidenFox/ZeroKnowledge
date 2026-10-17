@@ -64,7 +64,7 @@ closePreviewBtn.addEventListener('click', () => {
 });
 
 // Monitorização de Rede
-const SERVIDOR_FISICO_URL = 'http://localhost:3000';
+const SERVIDOR_FISICO_URL = 'https://api.eidenfox.xyz';
 const serverStatusBadge = document.getElementById('serverStatusBadge');
 export let servidorFisicoOnline = false;
 
