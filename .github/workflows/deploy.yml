@@ -1,0 +1,43 @@
+name: Deploy ZK-Drive
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: Inject Environment Variables (Create config.js)
+        run: |
+          echo "export const CONFIG = {" > config.js
+          echo "    SUPABASE_URL: '${{ secrets.SUPABASE_URL }}'," >> config.js
+          echo "    SUPABASE_ANON_KEY: '${{ secrets.SUPABASE_ANON_KEY }}'" >> config.js
+          echo "};" >> config.js
+          
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+        
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
